@@ -1,11 +1,3 @@
-//
-//  ViewController.swift
-//  Clima
-//
-//  Created by Angela Yu on 01/09/2019.
-//  Copyright © 2019 App Brewery. All rights reserved.
-//
-
 import UIKit
 
 class WeatherViewController: UIViewController, UITextFieldDelegate {
@@ -14,6 +6,9 @@ class WeatherViewController: UIViewController, UITextFieldDelegate {
     @IBOutlet weak var temperatureLabel: UILabel!
     @IBOutlet weak var cityLabel: UILabel!
     @IBOutlet weak var cityInputField: UITextField!
+    
+    
+    var weatherManager=WeatherManager()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -44,6 +39,7 @@ class WeatherViewController: UIViewController, UITextFieldDelegate {
     
     func textFieldDidEndEditing(_ textField: UITextField) {
         print(cityInputField.text!)
+        weatherManager.printWeatherData(cityName: cityInputField.text!)
         textField.text=""
     }
     
