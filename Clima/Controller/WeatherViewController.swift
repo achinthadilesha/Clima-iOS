@@ -38,8 +38,9 @@ class WeatherViewController: UIViewController, UITextFieldDelegate {
     }
     
     func textFieldDidEndEditing(_ textField: UITextField) {
-        print(cityInputField.text!)
+//        print(cityInputField.text!)
         weatherManager.printWeatherData(cityName: cityInputField.text!)
+        
         textField.text=""
     }
     
