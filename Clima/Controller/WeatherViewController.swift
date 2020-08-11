@@ -7,7 +7,7 @@ class WeatherViewController: UIViewController, UITextFieldDelegate {
     @IBOutlet weak var cityLabel: UILabel!
     @IBOutlet weak var cityInputField: UITextField!
     
-    
+    // initialzing the WeatherManager
     var weatherManager=WeatherManager()
     
     override func viewDidLoad() {
@@ -15,18 +15,19 @@ class WeatherViewController: UIViewController, UITextFieldDelegate {
         // Do any additional setup after loading the view.
         cityInputField.delegate=self
     }
-
+    
+    // what happens when the search button is pressed
     @IBAction func searchButtonPressed(_ sender: UIButton) {
         cityInputField.endEditing(true)
-//        print(cityInputField.text!)
     }
     
+    // what happens when the return/go button pressed on the keyboard
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
         cityInputField.endEditing(true)
-//        print(cityInputField.text!)
         return true
     }
     
+    // what heppens after the typing is finished on the text field (validation)
     func textFieldShouldEndEditing(_ textField: UITextField) -> Bool {
         if cityInputField.text != ""{
             return true
@@ -37,10 +38,11 @@ class WeatherViewController: UIViewController, UITextFieldDelegate {
         }
     }
     
+    // what happens after validation of the textfield
     func textFieldDidEndEditing(_ textField: UITextField) {
-//        print(cityInputField.text!)
         weatherManager.printWeatherData(cityName: cityInputField.text!)
         
+        // setting the text field value back to an empty field
         textField.text=""
     }
     
