@@ -41,7 +41,7 @@ class WeatherViewController: UIViewController, UITextFieldDelegate {
     // what happens after validation of the textfield
     func textFieldDidEndEditing(_ textField: UITextField) {
         weatherManager.printWeatherData(cityName: cityInputField.text!)
-        
+        cityLabel.text=(cityInputField.text!)
         // setting the text field value back to an empty field
         textField.text=""
     }

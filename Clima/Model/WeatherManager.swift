@@ -8,16 +8,13 @@
 import Foundation
 
 struct WeatherManager{
+    // api URL without the city name
     let weather="https://api.openweathermap.org/data/2.5/weather?units=metric&appid=20af37f2066cbe51701c96292966adee"
     
-    var weatherModel=WeatherModel()
-    
+    // function to set the city name for the URL using the UITextFields as the argument
     func printWeatherData(cityName:String){
         let weatherURL="\(weather)&q=\(cityName)"
-        
         performRequest(urlString: weatherURL)
-        
-        //        print(weatherURL)
     }
     
     //session handling for URL
@@ -29,14 +26,15 @@ struct WeatherManager{
             
             // give the session a task
             let task=session.dataTask(with: url) { (data, response, error) in
+                // if there is an error stop the program and print the error
                 if error != nil{
                     print(error!)
                     return
                 }
                 
+                // if there is some data catch it
                 if let safeData=data{
-                    //                    let dataString=String(data: safeData, encoding: .utf8)
-                    //                    print(dataString!)
+                    // passing the data to format in JSON format
                     self.parseJSON(weatherData: safeData)
                 }
             }
@@ -47,16 +45,23 @@ struct WeatherManager{
         }
     }
     
+    // format the data in JSON format
     func parseJSON(weatherData:Data){
         let decoder=JSONDecoder()
         do{
+            
             let decoderData=try decoder.decode(WeatherData.self, from: weatherData)
-            print(decoderData.name)
-            print(decoderData.main.temp)
-            // let tempID=getConditionName(weatherID: decoderData.weather[0].id)
-            let tempID=weatherModel.getConditionName(weatherID: decoderData.weather[0].id)
+            
+            let cityName=decoderData.name
+            let temperature=decoderData.main.temp
+            let tempID=decoderData.weather[0].id
+            
+            let weatherModel=WeatherModel(cityName: cityName, temperature: temperature, conditionID: tempID)
+            
+            print(cityName)
+            print(temperature)
             print(tempID)
-            print(decoderData.sys.country)
+            print(weatherModel.getConditionName(weatherID: tempID))
         }
         catch{
             print(error)

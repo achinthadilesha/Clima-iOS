@@ -10,6 +10,11 @@ import Foundation
 
 struct WeatherModel {
     
+    
+    let cityName:String
+    let temperature:Double
+    let conditionID:Int
+    
     func getConditionName(weatherID:Int)->String{
         switch weatherID {
         case 200...232:
