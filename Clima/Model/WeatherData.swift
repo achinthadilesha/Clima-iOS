@@ -8,7 +8,7 @@
 
 import Foundation
 
-struct WeatherData:Decodable {
+struct WeatherData:Codable {
     var name:String
     let main:Main
     let weather:[Weather]
@@ -16,16 +16,16 @@ struct WeatherData:Decodable {
 }
 
 
-struct Main:Decodable{
+struct Main:Codable{
     let temp:Double
 }
 
-struct Weather:Decodable {
+struct Weather:Codable {
     let description:String
     let id:Int
 }
 
 
-struct Country:Decodable{
+struct Country:Codable{
     let country:String
 }
