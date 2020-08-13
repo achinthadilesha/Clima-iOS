@@ -1,7 +1,7 @@
 import UIKit
 
-class WeatherViewController: UIViewController, UITextFieldDelegate{
-
+class WeatherViewController: UIViewController, UITextFieldDelegate, WeatherManagerDelegate{
+    
     @IBOutlet weak var conditionImageView: UIImageView!
     @IBOutlet weak var temperatureLabel: UILabel!
     @IBOutlet weak var cityLabel: UILabel!
@@ -14,6 +14,7 @@ class WeatherViewController: UIViewController, UITextFieldDelegate{
         super.viewDidLoad()
         // Do any additional setup after loading the view.
         cityInputField.delegate=self
+        weatherManager.delegate=self
     }
     
     // what happens when the search button is pressed
@@ -45,6 +46,12 @@ class WeatherViewController: UIViewController, UITextFieldDelegate{
         // setting the text field value back to an empty field
         textField.text=""
     }
+    
+    
+    func didUpdateWeather(weather: WeatherModel) {
+        print(weather.temperature)
+    }
+    
     
 }
 
