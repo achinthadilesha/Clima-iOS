@@ -9,7 +9,8 @@ import Foundation
 
 
 protocol WeatherManagerDelegate {
-    func didUpdateWeather(weather:WeatherModel)
+    func didUpdateWeather(_ weatherManager:WeatherManager, weather: WeatherModel)
+    func didFailWithError(error:Error)
 }
 
 struct WeatherManager{
@@ -19,14 +20,14 @@ struct WeatherManager{
     // function to set the city name for the URL using the UITextFields as the argument
     func printWeatherData(cityName:String){
         let weatherURL="\(weather)&q=\(cityName)"
-        performRequest(urlString: weatherURL)
+        performRequest(weatherURL)
     }
     
     
     var delegate:WeatherManagerDelegate?
     
     //session handling for URL
-    func performRequest(urlString:String){
+    func performRequest(_ urlString:String){
         // creating the URL
         if let url=URL(string: urlString){
             // session creation
@@ -36,15 +37,15 @@ struct WeatherManager{
             let task=session.dataTask(with: url) { (data, response, error) in
                 // if there is an error stop the program and print the error
                 if error != nil{
-                    print(error!)
+                    self.delegate?.didFailWithError(error:error!)
                     return
                 }
                 
                 // if there is some data catch it
                 if let safeData=data{
                     // passing the data to format in JSON format
-                    if let weather=self.parseJSON(weatherData: safeData){
-                        self.delegate?.didUpdateWeather(weather:weather)
+                    if let weather=self.parseJSON(safeData){
+                        self.delegate?.didUpdateWeather(self, weather:weather)
                     }
                 }
             }
@@ -56,7 +57,7 @@ struct WeatherManager{
     }
     
     // format the data in JSON format
-    func parseJSON(weatherData:Data)->WeatherModel?{
+    func parseJSON(_ weatherData:Data)->WeatherModel?{
         let decoder=JSONDecoder()
         do{
             
@@ -68,13 +69,13 @@ struct WeatherManager{
             
             let weatherModel=WeatherModel(cityName: cityName, temperature: temperature, conditionID: tempID)
         
-            print(weatherModel.conditionName)
-            print(weatherModel.temperatureString)
+//            print(weatherModel.conditionName)
+//            print(weatherModel.temperatureString)
             
             return weatherModel
         }
         catch{
-            print(error)
+            self.delegate?.didFailWithError(error: error)
             return nil
         }
     }
