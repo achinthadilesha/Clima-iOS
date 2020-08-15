@@ -1,6 +1,6 @@
 import UIKit
 
-class WeatherViewController: UIViewController, UITextFieldDelegate, WeatherManagerDelegate{
+class WeatherViewController: UIViewController{
     
     @IBOutlet weak var conditionImageView: UIImageView!
     @IBOutlet weak var temperatureLabel: UILabel!
@@ -17,44 +17,56 @@ class WeatherViewController: UIViewController, UITextFieldDelegate, WeatherManag
         weatherManager.delegate=self
     }
     
-    // what happens when the search button is pressed
-    @IBAction func searchButtonPressed(_ sender: UIButton) {
-        cityInputField.endEditing(true)
-    }
-    
-    // what happens when the return/go button pressed on the keyboard
-    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
-        cityInputField.endEditing(true)
-        return true
-    }
-    
-    // what heppens after the typing is finished on the text field (validation)
-    func textFieldShouldEndEditing(_ textField: UITextField) -> Bool {
-        if cityInputField.text != ""{
+}
+
+//MARK: - UITextFieldDelegate
+
+extension WeatherViewController : UITextFieldDelegate{
+        // what happens when the search button is pressed
+        @IBAction func searchButtonPressed(_ sender: UIButton) {
+            cityInputField.endEditing(true)
+        }
+        
+        // what happens when the return/go button pressed on the keyboard
+        func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+            cityInputField.endEditing(true)
             return true
         }
-        else{
-            cityInputField.placeholder="Enter a city to Search"
-            return false
+        
+        // what heppens after the typing is finished on the text field (validation)
+        func textFieldShouldEndEditing(_ textField: UITextField) -> Bool {
+            if cityInputField.text != ""{
+                return true
+            }
+            else{
+                cityInputField.placeholder="Enter a city to Search"
+                return false
+            }
         }
-    }
-    
-    // what happens after validation of the textfield
-    func textFieldDidEndEditing(_ textField: UITextField) {
-        weatherManager.printWeatherData(cityName: cityInputField.text!)
-        cityLabel.text=(cityInputField.text!)
-        // setting the text field value back to an empty field
-        textField.text=""
-    }
-    
+        
+        // what happens after validation of the textfield
+        func textFieldDidEndEditing(_ textField: UITextField) {
+            weatherManager.printWeatherData(cityName: cityInputField.text!)
+    //        cityLabel.text=(cityInputField.text!)
+            // setting the text field value back to an empty field
+            textField.text=""
+        }
+        
+}
+
+//MARK: - WeatherManagerDelegate
+
+extension WeatherViewController:WeatherManagerDelegate{
     
     func didUpdateWeather(_ weatherManager:WeatherManager, weather: WeatherModel) {
-        print(weather.temperature)
+        DispatchQueue.main.async {
+            self.temperatureLabel.text=String(weather.temperatureString)
+            self.conditionImageView.image=UIImage(systemName: weather.conditionName)
+            self.cityLabel.text=weather.cityName
+        }
     }
     
     func didFailWithError(error: Error) {
         print(error)
     }
-    
 }
-
