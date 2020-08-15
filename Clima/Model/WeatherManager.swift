@@ -6,7 +6,7 @@
 //
 
 import Foundation
-
+import CoreLocation
 
 protocol WeatherManagerDelegate {
     func didUpdateWeather(_ weatherManager:WeatherManager, weather: WeatherModel)
@@ -20,6 +20,11 @@ struct WeatherManager{
     // function to set the city name for the URL using the UITextFields as the argument
     func printWeatherData(cityName:String){
         let weatherURL="\(weather)&q=\(cityName)"
+        performRequest(weatherURL)
+    }
+    
+    func printWeatherData(latitude:CLLocationDegrees, longitude:CLLocationDegrees){
+        let weatherURL="\(weather)&lon=\(longitude)&lat=\(latitude)"
         performRequest(weatherURL)
     }
     
