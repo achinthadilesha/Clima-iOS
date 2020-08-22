@@ -15,7 +15,7 @@ protocol WeatherManagerDelegate {
 
 struct WeatherManager{
     // api URL without the city name
-    let weather="https://api.openweathermap.org/data/2.5/weather?units=metric&appid=20af37f2066cbe51701c96292966adee"
+    let weather="https://api.openweathermap.org/data/2.5/weather?units=metric&appid=" // openweather api key goes inside appid
     
     // function to set the city name for the URL using the UITextFields as the argument
     func printWeatherData(cityName:String){
